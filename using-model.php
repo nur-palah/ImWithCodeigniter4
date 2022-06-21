@@ -24,6 +24,12 @@ class userModel extends Model
         // returns the first row in the result set
         return $this->where(['id' => $id])->first();
     }
+    
+    // if you want to add search on your page
+    public function search($keyword)
+    {
+        return $this->table('users')->like('name', $keyword); // organize keywords by name
+    }
 
 }
 
@@ -49,6 +55,22 @@ class Crud extends BaseController
       ];
         
       return view('/',$data);
+    }
+
+    public function search()
+    {
+        $keyword = $this->request->getVar('keyword');
+        if ($keyword) {
+            $this->user->search($keyword);
+        } else {
+            $this->user;
+        }
+
+        $data = [
+            'dataUser' => $this->user->findAll()
+        ];
+
+        return view('/search', $data);
     }
     
 ?>
